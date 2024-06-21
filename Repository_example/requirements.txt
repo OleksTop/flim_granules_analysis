@@ -1,0 +1,2 @@
+numpy
+napari-flim-phasor-plotter==0.0.6
