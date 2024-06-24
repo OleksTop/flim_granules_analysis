@@ -47,16 +47,18 @@ The code relies on different libraries, packages, and plugins to run successfull
 
 Create a conda environment named `myenv` with Python version 3.9:
 
+```bash:
 mamba create --name myenv python=3.9
-
+```
 Activate the newly created environment:
 
+```bash:
 conda activate myenv
-
+```
 Install Required Dependencies
-
+```bash:
 pip install -r requirements.txt
-
+```
 This command will install all necessary libraries, packages, and plugins listed in the `requirements.txt` file, ensuring that the `flim_granules_analysis` tool runs successfully.
 
 
