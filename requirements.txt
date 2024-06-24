@@ -1,0 +1,13 @@
+aicsimageio
+scikit-image
+napari_simpleitk_image_processing==0.4.5
+pyclesperanto_prototype==0.24.1
+numpy
+napari_segment_blobs_and_things_with_membranes
+pandas
+napari_skimage_regionprops
+napari
+matplotlib
+natsort
+napari_flim_phasor_plotter
+
