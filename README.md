@@ -43,15 +43,18 @@ Each analysis option is exemplified in a separate notebook with detailed descrip
 ### Requirements
 The code relies on different libraries, packages, and plugins to run successfully. The list of dependencies is provided in the [requirements.txt](link/to/your/requirements.txt) file.
 
-## Installation
+### Installation
 
 Create a conda environment named `myenv` with Python version 3.9:
+
 mamba create --name myenv python=3.9
 
 Activate the newly created environment:
+
 conda activate myenv
 
 Install Required Dependencies
+
 pip install -r requirements.txt
 
 This command will install all necessary libraries, packages, and plugins listed in the `requirements.txt` file, ensuring that the `flim_granules_analysis` tool runs successfully.
