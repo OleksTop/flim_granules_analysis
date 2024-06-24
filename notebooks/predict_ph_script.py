@@ -5,7 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from scipy.interpolate import CubicSpline
 from pathlib import Path
-from FLIM_functions import hh_model
+from helper_functions import hh_model
 
 # Load model parameters from JSON file
 path_to_model_file = 'model_parameters.json'
