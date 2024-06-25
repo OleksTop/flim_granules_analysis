@@ -44,7 +44,6 @@ def analyze_single_fitted_channel(intensity_image_path, fit_image_path,
     import pandas as pd
     from pathlib import Path
     from napari_skimage_regionprops._parametric_images import relabel_with_map_array
-    from FLIM_functions import segment_image
 
     def standard_deviation_intensity(region, intensities):
         return np.std(intensities[region])
@@ -259,7 +258,6 @@ def analyze_single_fastflim_channel(intensity_image_path, minimal_mean_intensity
     from napari_skimage_regionprops._parametric_images import relabel_with_map_array
     def standard_deviation_intensity(region, intensities):
              return np.std(intensities[region])
-    from FLIM_functions import segment_image
         
     #open the data files (this is implementatio for 1 chanell image)
     aics_image1 = AICSImage(intensity_image_path)
@@ -354,8 +352,6 @@ def analyze_fitted_coloc(intensity_image_path, fit_image_path, minimal_mean_inte
     def standard_deviation_intensity(region, intensities):
          return np.std(intensities[region])
     from napari_skimage_regionprops._parametric_images import relabel_with_map_array
-    
-    from FLIM_functions import segment_image
     
     
     # Load images using AICSImage
@@ -467,8 +463,6 @@ def analyze_coloc_fastflim(intensity_image_path, minimal_mean_intensity=300, min
     def standard_deviation_intensity(region, intensities):
          return np.std(intensities[region])
     from napari_skimage_regionprops._parametric_images import relabel_with_map_array
-
-    from FLIM_functions import segment_image
         
     #open the data files (this is implementatio for 1 chanell image)
     aics_image1 = AICSImage(intensity_image_path)
@@ -558,7 +552,6 @@ def analize_with_phasor(data_path_1,threshold = 50):
     import pyclesperanto_prototype as cle  # version 0.24.1
     import pandas as pd
     from napari_skimage_regionprops._parametric_images import relabel_with_map_array
-    from FLIM_functions import segment_image
     
     #Loading PTU files and reading the images with correct chanells 
     list_layerdatatuple_1 = flim_plot._reader.read_single_ptu_file(data_path_1)
@@ -641,7 +634,6 @@ def analize_coloc_with_phasor(data_path_1,data_path_2,threshold = 50):
     import pyclesperanto_prototype as cle  # version 0.24.1
     import pandas as pd
     from napari_skimage_regionprops._parametric_images import relabel_with_map_array
-    from FLIM_functions import segment_image
     
     #Loading PTU files and reading the images with correct chanells 
     list_layerdatatuple_1 = flim_plot._reader.read_single_ptu_file(data_path_1)
