@@ -3,7 +3,7 @@ def in_folder_loop(global_path, selected_analysis_function, save_images=False, o
     import pandas as pd
     import natsort
     from pathlib import Path
-    from FLIM_functions import analyze_single_fitted_channel, generate_small_report_fig, analyze_single_fastflim_channel
+    from flim_processing import analyze_single_fitted_channel, generate_small_report_fig, analyze_single_fastflim_channel
     from skimage.io import imsave
     """
     Process each pair of .tif files in the specified folder using the provided analysis function.

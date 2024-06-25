@@ -7,7 +7,7 @@ from scipy.interpolate import CubicSpline
 from pathlib import Path
 import sys
 import os
-
+#importing the package 
 # Manually set the parent directory path
 notebook_dir = os.getcwd()  # This gets the current working directory of the notebook
 parent_dir = os.path.abspath(os.path.join(notebook_dir, '..'))
@@ -17,10 +17,11 @@ sys.path.insert(0, parent_dir)
 from flim_processing import hh_model
 
 # Load model parameters from JSON file
-path_to_model_file = r"../notebooks/model_parameters.json"
+path_to_model_file = r"../flim_processing/model_parameters.json"
 with open(path_to_model_file, 'r') as json_file:
     model_data = json.load(json_file)
 
+#Upload the csv file that has to be updated 
 # Load the image data from CSV
 image_data_path = Path(r"../data/master_table.csv")
 image_data = pd.read_csv(image_data_path)
