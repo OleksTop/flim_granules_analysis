@@ -5,12 +5,25 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from scipy.interpolate import CubicSpline
 from pathlib import Path
-from helper_functions import hh_model
+import sys
+import os
+
+# Manually set the parent directory path
+notebook_dir = os.getcwd()  # This gets the current working directory of the notebook
+parent_dir = os.path.abspath(os.path.join(notebook_dir, '..'))
+
+# Add the parent directory to the system path
+sys.path.insert(0, parent_dir)
+from flim_processing import hh_model
 
 # Load model parameters from JSON file
-path_to_model_file = 'model_parameters.json'
+path_to_model_file = r"../notebooks/model_parameters.json"
 with open(path_to_model_file, 'r') as json_file:
     model_data = json.load(json_file)
+
+# Load the image data from CSV
+image_data_path = Path(r"../data/master_table.csv")
+image_data = pd.read_csv(image_data_path)
 
 # Access the parameters and confidence intervals
 pKa_cf = model_data['parameters']['pKa']
@@ -29,10 +42,6 @@ lifetime_values = hh_model(pH_values, pKa_cf, tau_HA_cf, tau_Aminus_cf)
 # 3) dont clip or convert to nan (comment the line with np clip) and have funny values, that you need to filter
 
 spline_interpolator = CubicSpline(lifetime_values, pH_values, extrapolate=True)
-
-# Load the image data from CSV
-image_data_path = Path(r"G:\SP8_FLIM\0_Workflow_OPTIM\pH\Outputs\master_table.csv")
-image_data = pd.read_csv(image_data_path)
 
 # Extract mean_tau values as numpy arrays
 lifetimes_from_image_data = image_data['mean_tau'].to_numpy()
