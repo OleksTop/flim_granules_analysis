@@ -57,7 +57,7 @@ def in_folder_loop(global_path, selected_analysis_function, save_images=False, o
 
     # Process each pair of files in the current folder
     for paired_path in paired_path_list:
-        result_per_image, report_per_image, multichannel_image = selected_analysis_function(paired_path[1], paired_path[0])
+        result_per_image, report_per_image, multichannel_image = selected_analysis_function(paired_path[0], paired_path[1])
 
         # Add identification to the result table (image level)
         result_per_image['File Name'] = paired_path[1].stem
