@@ -110,3 +110,95 @@ def hh_model(pH, pKa, tau_HA, tau_Aminus):
     # tau_meas = (tau_HA + tau_Aminus * 10 ** (pH - pKa)) / (1 + 10 ** (pH - pKa))
     ratio = 10 ** (pH - pKa)
     return (tau_HA + tau_Aminus * ratio) / (1 + ratio)
+
+def sample_data_with_optional_balancing(data, n=100, balance_by_date=False):
+    """
+    Sample `n` instances for each combination of `transfection`, `cells`, and `treatment`.
+    Optionally balance the sampling by `Date` if `balance_by_date` is True. Logs cases where
+    fewer than `n` instances are available.
+
+    Args:
+    - data: DataFrame containing the data to sample from.
+    - n: Number of instances to sample for each combination of `transfection`, `cells`, and `treatment`.
+    - balance_by_date: Boolean flag indicating whether to balance samples by `Date` (default: False).
+
+    Returns:
+    - A tuple: (sampled_data, shortfall_log)
+      sampled_data: A DataFrame with the sampled data.
+      shortfall_log: A DataFrame logging groups where fewer than `n` instances were available.
+    """
+    # Group the data by transfection, cells, and treatment (ignoring Date for now)
+    grouped_data = data.groupby(['transfection', 'cells', 'treatment'])
+
+    # Initialize an empty DataFrame to store sampled data
+    sampled_data = pd.DataFrame()
+
+    # Initialize a list to log groups where fewer than `n` instances are available
+    shortfall_log = []
+
+    # Iterate over each group
+    for group_name, group_df in grouped_data:
+        total_available = len(group_df)
+
+        # If the group has fewer than `n` instances, log the shortfall
+        if total_available < n:
+            shortfall_log.append({
+                'group': group_name,
+                'available_instances': total_available,
+                'requested_samples': n
+            })
+            # Sample all available instances
+            sampled_group_df = group_df
+        else:
+            # Shuffle the group_df to ensure randomness
+            group_df = group_df.sample(frac=1, random_state=42)
+
+            if balance_by_date:
+                # Get the unique dates in this group
+                unique_dates = group_df['Date'].unique()
+
+                # If there's only one date, sample directly
+                if len(unique_dates) == 1:
+                    sampled_group_df = group_df.sample(n=n, replace=False)
+                else:
+                    # Calculate how many samples we want per date using proportional distribution
+                    date_counts = group_df['Date'].value_counts()
+                    samples_per_date = (date_counts / date_counts.sum() * n).astype(int)
+
+                    # Initialize the sampled group DataFrame
+                    sampled_group_df = pd.DataFrame()
+
+                    # Take samples from each date based on the calculated proportional samples
+                    for date, count in samples_per_date.items():
+                        available_from_date = len(group_df[group_df['Date'] == date])
+                        samples_to_take = min(count, available_from_date)
+                        sampled_group_df = pd.concat([
+                            sampled_group_df,
+                            group_df[group_df['Date'] == date].sample(samples_to_take, replace=False)
+                        ])
+
+                    # Adjust to exactly `n` samples by adding/removing random samples if necessary
+                    if len(sampled_group_df) < n:
+                        additional_samples = group_df[~group_df.index.isin(sampled_group_df.index)].sample(n - len(sampled_group_df), replace=False)
+                        sampled_group_df = pd.concat([sampled_group_df, additional_samples])
+                    elif len(sampled_group_df) > n:
+                        sampled_group_df = sampled_group_df.sample(n=n, replace=False)
+            else:
+                # If not balancing by date, just randomly sample `n` instances
+                sampled_group_df = group_df.sample(n=n, replace=False, random_state=42)
+
+        # Append the sampled data to the final DataFrame
+        sampled_data = pd.concat([sampled_data, sampled_group_df], ignore_index=True)
+
+    # Convert the shortfall log to a DataFrame for better readability
+    shortfall_log_df = pd.DataFrame(shortfall_log)
+
+    # Inspect the shortfall log
+    if not shortfall_log_df.empty:
+        print("Groups with fewer available instances than requested:")
+        print(shortfall_log_df)
+    else:
+        print("No shortfalls found!")
+
+    return sampled_data, shortfall_log_df
+
