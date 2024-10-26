@@ -111,7 +111,12 @@ def hh_model(pH, pKa, tau_HA, tau_Aminus):
     ratio = 10 ** (pH - pKa)
     return (tau_HA + tau_Aminus * ratio) / (1 + ratio)
 
+
 def sample_data_with_optional_balancing(data, n=100, balance_by_date=False):
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    import seaborn as sns
     """
     Sample `n` instances for each combination of `transfection`, `cells`, and `treatment`.
     Optionally balance the sampling by `Date` if `balance_by_date` is True. Logs cases where
